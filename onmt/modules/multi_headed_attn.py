@@ -629,6 +629,7 @@ class MultiHeadedAttention(torch.nn.Module):
             self.max_relative_positions in [-1, 0]
             and not return_attn
             and query.device != torch.device("cpu")
+            and query.device != torch.device("mps", 0)
             and self.self_attn_type == "scaled-dot-flash"
         ):
             # Apply flash2 attention.

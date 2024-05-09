@@ -416,7 +416,13 @@ def build_dynamic_dataset_iter(
     if corpora is None:
         assert task != CorpusTask.TRAIN, "only valid corpus is ignorable."
         return None
-    device = torch.device(device_id) if device_id >= 0 else torch.device("cpu")
+    # device = torch.device(device_id) if device_id >= 0 else torch.device("cpu")
+    if torch.backends.mps.is_built() and torch.backends.mps.is_available():
+        device = torch.device("mps")
+    elif device_id >= 0:
+        torch.device(device_id)
+    else:
+         device = torch.device("cpu")        
     num_workers = opt.num_workers if hasattr(opt, "num_workers") else 0
     if num_workers == 0 or task == CorpusTask.INFER:
         # single thread - create batch directly on GPU if device is gpu

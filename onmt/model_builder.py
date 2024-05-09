@@ -129,6 +129,8 @@ def load_test_model(opt, device_id=0, model_path=None):
             elif opt.gpu > -1:
                 device_id = opt.gpu
             device = torch.device("cuda", device_id)
+        elif torch.backends.mps.is_built() and torch.backends.mps.is_available():
+            device = torch.device("mps")
         else:
             device = torch.device("cpu")
         offset = 0
@@ -446,6 +448,8 @@ def build_model(model_opt, opt, vocabs, checkpoint, device_id):
     else:
         if use_gpu(opt):
             device = torch.device("cuda")
+        elif torch.backends.mps.is_built() and torch.backends.mps.is_available():
+            device = torch.device("mps")
         else:
             device = torch.device("cpu")
         offset = 0

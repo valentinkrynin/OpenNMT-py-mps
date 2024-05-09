@@ -74,7 +74,13 @@ class LossCompute(nn.Module):
         training/validation logging.
         The Criterion and LossCompute options are triggered by opt settings.
         """
-        device = torch.device("cuda" if onmt.utils.misc.use_gpu(opt) else "cpu")
+        # device = torch.device("cuda" if onmt.utils.misc.use_gpu(opt) else "cpu")
+        if onmt.utils.misc.use_gpu(opt):
+            device = torch.device("cuda")
+        elif torch.backends.mps.is_built() and torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
 
         padding_idx = vocab[DefaultTokens.PAD]
         unk_idx = vocab[DefaultTokens.UNK]

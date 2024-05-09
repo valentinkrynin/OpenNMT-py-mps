@@ -221,6 +221,7 @@ class InferenceEngineCT2(InferenceEngine):
     def __init__(self, opt):
         import ctranslate2
         import pyonmttok
+        import torch
 
         super().__init__(opt)
         self.opt = opt
@@ -230,6 +231,9 @@ class InferenceEngineCT2(InferenceEngine):
         if opt.world_size == 1:
             self.device_index = opt.gpu_ranks
             self.device = "cuda"
+        elif torch.backends.mps.is_built() and torch.backends.mps.is_available():
+            self.device_index = 0
+            self.device = "mps"
         else:
             self.device_index = 0
             self.device = "cpu"
