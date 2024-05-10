@@ -422,7 +422,7 @@ def build_dynamic_dataset_iter(
     elif device_id >= 0:
         torch.device(device_id)
     else:
-         device = torch.device("cpu")        
+        device = torch.device("cpu")
     num_workers = opt.num_workers if hasattr(opt, "num_workers") else 0
     if num_workers == 0 or task == CorpusTask.INFER:
         # single thread - create batch directly on GPU if device is gpu
